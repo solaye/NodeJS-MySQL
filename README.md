@@ -6,7 +6,11 @@ This app takes in orders from customers and deplete from the store's total suppl
 
 The app first displays a list of all of the available products, their costs, and current stock. 
 
+<<<<<<< HEAD
 ![](Store.gif)
+=======
+![](StoreGif.gif)
+>>>>>>> 4f6b8157e3f8ecebf99454e3ab531e920e5a93b8
 
 
 
