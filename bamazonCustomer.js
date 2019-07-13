@@ -24,7 +24,7 @@ var connection = mysql.createConnection({
     connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err;
       console.log(res);
-      connection.end();
+     // connection.end();
       inquirer
     .prompt([
       {
@@ -32,6 +32,8 @@ var connection = mysql.createConnection({
         type: "input",
         message: 'Type the id of the item you would like to buy.' 
     },
+
+
      
       
     ]).then(function(answer){
@@ -50,17 +52,30 @@ var connection = mysql.createConnection({
         ]).then(function(quantity){
             console.log(quantity);
             console.log(answer);
+            console.log(res[0].item_id);
             for( var i =0; i<res.length;i++){
                 console.log(res[i].item_id);
                 console.log('*********');
-                if(answer.itemrequest==res[i].item_id && quantity.quantity<res[i].stock_quantity){
-               console.log('My pleasure'); 
-              
- break;
-        }
-                
-               else { console.log('Insufficient quantity!')
-            break;};
+                if(answer.itemrequest==res[i].item_id &&  parseInt(quantity.quantity)<=res[i].stock_quantity){
+                  console.log('My pleasure'); 
+                   var newQuantity = res[i].stock_quantity-quantity.quantity;
+                  connection.query(
+                  `UPDATE products SET stock_quantity = ? where item_id = ?; `,
+                  [newQuantity,res[i].item_id],
+                  
+                    
+                  
+                  function(err, sql) {
+                    console.log(err);
+                    //console.log(sql + " product inserted!\n");
+                    console.log('Thanks for your business! Come again.');
+                    
+                    
+                  });
+                } else if (answer.itemrequest==res[i].item_id &&  parseInt(quantity.quantity)>res[i].stock_quantity)  { 
+                    console.log('Insufficient quantity!')
+                    break;
+                };
                 
             }
 
